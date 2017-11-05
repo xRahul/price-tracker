@@ -67,7 +67,7 @@ function getLastPriceData() {
 
 
 function isNewEntryRequired($lastData, $apiData) {
-    if ($lastData[1] !== $apiData[1] || $lastData[2] !== $apiData[2]) {
+    if (strcmp($lastData[1], $apiData[1]) !== 0 || strcmp($lastData[2], $apiData[2]) !== 0) {
         return true;
     }
     return false;

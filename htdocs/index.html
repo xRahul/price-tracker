@@ -14,9 +14,10 @@
             var buyPriceKey = 'Buy';
             var sellPriceKey = 'Sell';
             var graphTitle = 'ZebPay Bitcoin Price Graph';
+            var csvFileName = 'zebPayPrices.csv';
             var webHome = 'http://zgraph.unaux.com';
-            var apiPage = '/api';
-            var csvFile = '/zebPayPrices.csv';
+            var apiPage = '/api/';
+            var csvFilePath = apiPage + csvFileName;
 
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function() {
@@ -28,7 +29,7 @@
             xmlHttp.send(null);
 
 
-            Plotly.d3.csv(webHome + csvFile, function(err, rows) {
+            Plotly.d3.csv(webHome + csvFilePath, function(err, rows) {
 
                 function unpack(rows, key) {
                     return rows.map(function(row) { return row[key]; });
