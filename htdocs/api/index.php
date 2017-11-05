@@ -1,5 +1,8 @@
 <?php
 
+$timeScriptStarts = microtime(true);
+
+$accessLogFileName = 'access-log.csv';
 $fileName = 'zebPayPrices.csv';
 $apiUrl = 'https://www.zebapi.com/api/v1/market/ticker/btc/inr';
 $timeZone = 'Asia/Kolkata';
@@ -85,6 +88,14 @@ function writeEntryToFile($apiData) {
 
 
 
+function writeAccessLog($apiData, $timeTaken) {
+    global $accessLogFileName;
+
+    $f = fopen($accessLogFileName, 'a');
+    fputcsv($f, array_merge($apiData, [$timeTaken]));
+    fclose($f);
+}
+
 
 
 initSettings();
@@ -99,3 +110,7 @@ if ($newEntryRequired === true) {
 }
 
 echo json_encode(array_merge($apiData, ['written' => $written]));
+
+$timeScriptEnds = microtime(true);
+$timeTaken = intval(($timeScriptEnds - $timeScriptStarts) * 1000);
+writeAccessLog($apiData, $timeTaken);
