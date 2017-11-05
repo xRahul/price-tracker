@@ -13,7 +13,17 @@ $sellCsvPriceKey = 'Sell';
 
 function initSettings() {
     global $timeZone;
+    global $fileName;
+    global $dateCsvPriceKey;
+    global $buyCsvPriceKey;
+    global $sellCsvPriceKey;
+
     date_default_timezone_set($timeZone);
+    if (!file_exists($fileName)) {
+        $f = fopen($fileName, 'w');
+        fputcsv($f, [$dateCsvPriceKey, $buyCsvPriceKey, $sellCsvPriceKey]);
+        fclose($f);
+    }
 }
 
 
@@ -22,6 +32,7 @@ function getZebPayPriceData() {
     global $apiUrl;
     global $buyApiPriceKey;
     global $sellApiPriceKey;
+
     $json = file_get_contents($apiUrl);
     $result = json_decode($json, true);
     return [date(DATE_ISO8601), $result[$buyApiPriceKey], $result[$sellApiPriceKey]];
@@ -66,18 +77,9 @@ function isNewEntryRequired($lastData, $apiData) {
 
 function writeEntryToFile($apiData) {
     global $fileName;
-    global $dateCsvPriceKey;
-    global $buyCsvPriceKey;
-    global $sellCsvPriceKey;
 
-    if (file_exists($fileName)) {
-        $f = fopen($fileName, 'a');
-        fputcsv($f, $apiData);
-    } else {
-        $f = fopen($fileName, 'w');
-        fputcsv($f, [$dateCsvPriceKey, $buyCsvPriceKey, $sellCsvPriceKey]);
-        fputcsv($f, $apiData);
-    }
+    $f = fopen($fileName, 'a');
+    fputcsv($f, $apiData);
     fclose($f);
 }
 
