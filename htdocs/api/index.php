@@ -2,50 +2,58 @@
 
 $timeScriptStarts = microtime(true);
 
-$accessLogFileName = 'access-log.csv';
-$fileName = 'zebPayPrices.csv';
-$apiUrl = 'https://www.zebapi.com/api/v1/market/ticker/btc/inr';
+$nowDateTime = new DateTime();
+$nowWeek = $nowDateTime->format("W");
+$nowYear = $nowDateTime->format("Y");
+$accessLogFileName = 'access-log-' . $nowWeek . '-' . $nowYear . '.csv';
+$priceListFileName = 'zebPayPrices.csv';
+$zebPayApiUrl = 'https://www.zebapi.com/api/v1/market/ticker/btc/inr';
 $timeZone = 'Asia/Kolkata';
 $buyApiPriceKey = 'buy';
 $sellApiPriceKey = 'sell';
 $dateCsvPriceKey = 'Date';
 $buyCsvPriceKey = 'Buy';
 $sellCsvPriceKey = 'Sell';
+$apiCallWait = 120;
+
+
+
+function writeCsvToFile($fileName, $arrayToWrite) {
+    $f = fopen($fileName, 'a');
+    fputcsv($f, $arrayToWrite);
+    fclose($f);
+}
 
 
 
 function initSettings() {
     global $timeZone;
-    global $fileName;
+    global $priceListFileName;
     global $dateCsvPriceKey;
     global $buyCsvPriceKey;
     global $sellCsvPriceKey;
 
     date_default_timezone_set($timeZone);
-    if (!file_exists($fileName)) {
-        $f = fopen($fileName, 'w');
-        fputcsv($f, [$dateCsvPriceKey, $buyCsvPriceKey, $sellCsvPriceKey]);
-        fclose($f);
+    if (!file_exists($priceListFileName)) {
+        writeCsvToFile($priceListFileName, [$dateCsvPriceKey, $buyCsvPriceKey, $sellCsvPriceKey]);
     }
 }
 
 
 
 function getZebPayPriceData() {
-    global $apiUrl;
+    global $zebPayApiUrl;
     global $buyApiPriceKey;
     global $sellApiPriceKey;
 
-    $json = file_get_contents($apiUrl);
+    $json = file_get_contents($zebPayApiUrl);
     $result = json_decode($json, true);
     return [date(DATE_ISO8601), $result[$buyApiPriceKey], $result[$sellApiPriceKey]];
 }
 
 
 
-function getLastPriceData() {
-    global $fileName;
-
+function getLastLineFromCsvAsArray($fileName) {
 	$line = '';
     $f = fopen($fileName, 'r');
     $cursor = -1;
@@ -69,6 +77,27 @@ function getLastPriceData() {
 
 
 
+function getLastPriceData() {
+    global $priceListFileName;
+
+    return getLastLineFromCsvAsArray($priceListFileName);
+}
+
+
+
+function getLastAccessTimestamp() {
+    global $accessLogFileName;
+
+    if (!file_exists($accessLogFileName)) {
+        return 0;
+    }
+
+    $lastLineArray = getLastLineFromCsvAsArray($accessLogFileName);
+    return strtotime($lastLineArray[0]);
+}
+
+
+
 function isNewEntryRequired($lastData, $apiData) {
     if (strcmp($lastData[1], $apiData[1]) !== 0 || strcmp($lastData[2], $apiData[2]) !== 0) {
         return true;
@@ -78,12 +107,10 @@ function isNewEntryRequired($lastData, $apiData) {
 
 
 
-function writeEntryToFile($apiData) {
-    global $fileName;
+function writePriceEntry($apiData) {
+    global $priceListFileName;
 
-    $f = fopen($fileName, 'a');
-    fputcsv($f, $apiData);
-    fclose($f);
+    writeCsvToFile($priceListFileName, $apiData);
 }
 
 
@@ -92,26 +119,32 @@ function writeAccessLog($apiData, $timeTaken) {
     global $accessLogFileName;
 
     $from = array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : 'local';
-
-    $f = fopen($accessLogFileName, 'a');
-    fputcsv($f, array_merge($apiData, [$timeTaken, $from]));
-    fclose($f);
+    writeCsvToFile($accessLogFileName, [date(DATE_ISO8601), $timeTaken, $from]);
 }
 
 
 
-initSettings();
-$apiData = getZebPayPriceData();
-$lastData = getLastPriceData();
-$newEntryRequired = isNewEntryRequired($lastData, $apiData);
-
+$lastData = [];
+$apiData = [];
+$newEntryRequired = false;
+$apiCalled = false;
 $written = false;
+
+initSettings();
+
+if (time() - getLastAccessTimestamp() > $apiCallWait) {
+    $lastData = getLastPriceData();
+    $apiData = getZebPayPriceData();
+    $newEntryRequired = isNewEntryRequired($lastData, $apiData);
+    $apiCalled = true;
+}
+
 if ($newEntryRequired === true) {
-    writeEntryToFile($apiData);
+    writePriceEntry($apiData);
     $written = true;
 }
 
-echo json_encode(array_merge($apiData, ['written' => $written]));
+echo json_encode(array_merge($apiData, ['apiCalled' => $apiCalled, 'written' => $written]));
 
 $timeScriptEnds = microtime(true);
 $timeTaken = intval(($timeScriptEnds - $timeScriptStarts) * 1000);
