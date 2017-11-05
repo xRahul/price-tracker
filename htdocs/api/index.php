@@ -91,8 +91,10 @@ function writeEntryToFile($apiData) {
 function writeAccessLog($apiData, $timeTaken) {
     global $accessLogFileName;
 
+    $from = array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : 'local';
+
     $f = fopen($accessLogFileName, 'a');
-    fputcsv($f, array_merge($apiData, [$timeTaken]));
+    fputcsv($f, array_merge($apiData, [$timeTaken, $from]));
     fclose($f);
 }
 
