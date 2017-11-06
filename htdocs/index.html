@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ZebPay Price Tracker</title>
+        <title>ZebPay Bitcoin Price Tracker (INR)</title>
         <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -109,7 +109,7 @@
                 var trace1 = {
                     type: "scatter",
                     mode: "lines",
-                    name: buyPriceKey,
+                    name: buyPriceKey + ' ₹',
                     x: unpack(rows, datePriceKey),
                     y: unpack(rows, buyPriceKey),
                     line: { color: '#17BECF' }
@@ -118,7 +118,7 @@
                 var trace2 = {
                     type: "scatter",
                     mode: "lines",
-                    name: sellPriceKey,
+                    name: sellPriceKey + ' ₹',
                     x: unpack(rows, datePriceKey),
                     y: unpack(rows, sellPriceKey),
                     line: { color: '#7F7F7F' }
