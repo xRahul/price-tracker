@@ -99,6 +99,9 @@ function getLastAccessTimestamp() {
 
 
 function isNewEntryRequired($lastData, $apiData) {
+    if (empty($apiData[1]) || empty($apiData[2])) {
+        return false;
+    }
     if (strcmp($lastData[1], $apiData[1]) !== 0 || strcmp($lastData[2], $apiData[2]) !== 0) {
         return true;
     }
