@@ -30,12 +30,12 @@
             var datePriceKey = 'Date';
             var buyPriceKey = 'Buy';
             var sellPriceKey = 'Sell';
-            var graphTitle = 'ZebPay Bitcoin Price Graph';
+            var graphTitleZebpay = 'ZebPay Bitcoin Price Graph';
             var csvFileName = 'zebpayPriceData.csv';
             var webHome = 'http://zgraph.unaux.com';
-            var apiPage = '/api/index.php?exchange=zebpay';
+            var apiPageZebpay = '/api/index.php?exchange=zebpay';
             var datapath = '/api/data/';
-            var csvFilePath = datapath + csvFileName;
+            var csvFilePathZebpay = datapath + csvFileName;
 
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function() {
@@ -43,11 +43,11 @@
                     console.log("Price fetched");
                 }
             }
-            xmlHttp.open("GET", webHome + apiPage, true); // true for asynchronous
+            xmlHttp.open("GET", webHome + apiPageZebpay, true); // true for asynchronous
             xmlHttp.send(null);
 
 
-            Plotly.d3.csv(webHome + csvFilePath, function(err, rows) {
+            Plotly.d3.csv(webHome + csvFilePathZebpay, function(err, rows) {
 
                 function unpack(rows, key) {
                     return rows.map(function(row) { return row[key]; });
@@ -131,7 +131,7 @@
                 var data = [trace1, trace2];
 
                 var layout = {
-                    title: graphTitle,
+                    title: graphTitleZebpay,
                     xaxis: {
                         rangeselector: selectorOptions,
                         rangeslider: {}
@@ -145,12 +145,12 @@
             var datePriceKey = 'Date';
             var buyPriceKey = 'Buy';
             var sellPriceKey = 'Sell';
-            var graphTitle = 'Coinome Bitcoin Price Graph';
+            var graphTitleCoinome = 'Coinome Bitcoin Price Graph';
             var csvFileName = 'coinomePriceData.csv';
             var webHome = 'http://zgraph.unaux.com';
-            var apiPage = '/api/index.php?exchange=coinome';
+            var apiPageCoinome = '/api/index.php?exchange=coinome';
             var datapath = '/api/data/';
-            var csvFilePath = datapath + csvFileName;
+            var csvFilePathCoinome = datapath + csvFileName;
 
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function() {
@@ -158,11 +158,11 @@
                     console.log("Price fetched");
                 }
             }
-            xmlHttp.open("GET", webHome + apiPage, true); // true for asynchronous
+            xmlHttp.open("GET", webHome + apiPageCoinome, true); // true for asynchronous
             xmlHttp.send(null);
 
 
-            Plotly.d3.csv(webHome + csvFilePath, function(err, rows) {
+            Plotly.d3.csv(webHome + csvFilePathCoinome, function(err, rows) {
 
                 function unpack(rows, key) {
                     return rows.map(function(row) { return row[key]; });
@@ -245,15 +245,15 @@
 
                 var data = [trace1, trace2];
 
-                var layout = {
-                    title: graphTitle,
+                var layout_coinome = {
+                    title: graphTitleCoinome,
                     xaxis: {
                         rangeselector: selectorOptions,
                         rangeslider: {}
                     }
                 };
 
-                Plotly.newPlot('coinome-graph', data, layout);
+                Plotly.newPlot('coinome-graph', data, layout_coinome);
             })
         </script>
     </body>
