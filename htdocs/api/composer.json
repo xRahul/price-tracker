@@ -1,0 +1,18 @@
+{
+    "name": "xrahul/price-tracker",
+    "description": "Price tracker to track price via crons",
+    "type": "api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rahul Jain",
+            "email": "rahul_jain@live.in"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "PriceTracker\\": ""
+        }
+    }
+}
