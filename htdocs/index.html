@@ -18,6 +18,9 @@
     <body>
         <!-- Plotly chart will be drawn inside this DIV -->
         <div id="zebpay-graph"></div>
+        <br>
+        <br>
+        <div id="coinome-graph"></div>
 
         <a id="openLink" href="https://github.com/xRahul/price-tracker" title="Price Tracker">
             Open Source
@@ -136,6 +139,121 @@
                 };
 
                 Plotly.newPlot('zebpay-graph', data, layout);
+            })
+        </script>
+        <script>
+            var datePriceKey = 'Date';
+            var buyPriceKey = 'Buy';
+            var sellPriceKey = 'Sell';
+            var graphTitle = 'Coinome Bitcoin Price Graph';
+            var csvFileName = 'coinomePriceData.csv';
+            var webHome = 'http://zgraph.unaux.com';
+            var apiPage = '/api/index.php?exchange=coinome';
+            var datapath = '/api/data/';
+            var csvFilePath = datapath + csvFileName;
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    console.log("Price fetched");
+                }
+            }
+            xmlHttp.open("GET", webHome + apiPage, true); // true for asynchronous
+            xmlHttp.send(null);
+
+
+            Plotly.d3.csv(webHome + csvFilePath, function(err, rows) {
+
+                function unpack(rows, key) {
+                    return rows.map(function(row) { return row[key]; });
+                }
+
+                var selectorOptions = {
+                    buttons: [{
+                        step: 'month',
+                        stepmode: 'backward',
+                        count: 3,
+                        label: '3M'
+                    }, {
+                        step: 'month',
+                        stepmode: 'backward',
+                        count: 1,
+                        label: '1M'
+                    }, {
+                        step: 'week',
+                        stepmode: 'backward',
+                        count: 2,
+                        label: '2w'
+                    }, {
+                        step: 'week',
+                        stepmode: 'backward',
+                        count: 1,
+                        label: '1w'
+                    }, {
+                        step: 'day',
+                        stepmode: 'backward',
+                        count: 3,
+                        label: '3d'
+                    }, {
+                        step: 'day',
+                        stepmode: 'backward',
+                        count: 1,
+                        label: '1d'
+                    }, {
+                        step: 'hour',
+                        stepmode: 'backward',
+                        count: 12,
+                        label: '12h'
+                    }, {
+                        step: 'hour',
+                        stepmode: 'backward',
+                        count: 6,
+                        label: '6h'
+                    }, {
+                        step: 'hour',
+                        stepmode: 'backward',
+                        count: 2,
+                        label: '2h'
+                    }, {
+                        step: 'minute',
+                        stepmode: 'backward',
+                        count: 30,
+                        label: '30m'
+                    }, {
+                        step: 'all',
+                    }],
+                };
+
+
+                var trace1 = {
+                    type: "scatter",
+                    mode: "lines",
+                    name: buyPriceKey,
+                    x: unpack(rows, datePriceKey),
+                    y: unpack(rows, buyPriceKey),
+                    line: { color: '#17BECF' }
+                }
+
+                var trace2 = {
+                    type: "scatter",
+                    mode: "lines",
+                    name: sellPriceKey,
+                    x: unpack(rows, datePriceKey),
+                    y: unpack(rows, sellPriceKey),
+                    line: { color: '#7F7F7F' }
+                }
+
+                var data = [trace1, trace2];
+
+                var layout = {
+                    title: graphTitle,
+                    xaxis: {
+                        rangeselector: selectorOptions,
+                        rangeslider: {}
+                    }
+                };
+
+                Plotly.newPlot('coinome-graph', data, layout);
             })
         </script>
     </body>
