@@ -17,244 +17,135 @@
 
     <body>
         <!-- Plotly chart will be drawn inside this DIV -->
-        <div id="zebpay-graph"></div>
+        <div id="zebpay-bitcoin-graph"></div>
         <br>
         <br>
-        <div id="coinome-graph"></div>
-
+        <div id="coinome-bitcoin-graph"></div>
+        <br>
+        <br>
+        <div id="coinome-litecoin-graph"></div>
+        <br>
+        <br>
+        <div id="coinome-bitcash-graph"></div>
+        <br>
+        <br>
         <a id="openLink" href="https://github.com/xRahul/price-tracker" title="Price Tracker">
             Open Source
         </a>
 
         <script>
-            var datePriceKey = 'Date';
-            var buyPriceKey = 'Buy';
-            var sellPriceKey = 'Sell';
-            var graphTitleZebpay = 'ZebPay Bitcoin Price Graph';
-            var csvFileName = 'zebpayPriceData.csv';
-            var webHome = 'http://zgraph.unaux.com';
-            var apiPageZebpay = '/api/index.php?exchange=zebpay';
-            var datapath = '/api/data/';
-            var csvFilePathZebpay = datapath + csvFileName;
 
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function() {
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                    console.log("Price fetched");
-                }
+            var BITCOIN = 'bitcoin';
+            var BITCASH = 'bitcash';
+            var LITECOIN = 'litecoin';
+            var ZEBPAY = 'zebpay';
+            var COINOME = 'coinome';
+            var DATE_PRICE_KEY = 'Date';
+            var BUY_PRICE_KEY = 'Buy';
+            var SELL_PRICE_KEY = 'Sell';
+            var CSV_FILENAME_SUFFIX = 'PriceData.csv';
+            var WEB_HOME = 'http://zgraph.unaux.com';
+            var API_DATA_PATH = '/api/data/';
+
+            var selectorOptions = {
+                buttons: [{
+                    step: 'month',
+                    stepmode: 'backward',
+                    count: 3,
+                    label: '3M'
+                }, {
+                    step: 'month',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1M'
+                }, {
+                    step: 'week',
+                    stepmode: 'backward',
+                    count: 2,
+                    label: '2w'
+                }, {
+                    step: 'week',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1w'
+                }, {
+                    step: 'day',
+                    stepmode: 'backward',
+                    count: 3,
+                    label: '3d'
+                }, {
+                    step: 'day',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1d'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 12,
+                    label: '12h'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 6,
+                    label: '6h'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 2,
+                    label: '2h'
+                }, {
+                    step: 'minute',
+                    stepmode: 'backward',
+                    count: 30,
+                    label: '30m'
+                }, {
+                    step: 'all',
+                }],
+            };
+
+            var firstUpperCase = function(str) {
+                str.charAt(0).toUpperCase() + str.slice(1)
             }
-            xmlHttp.open("GET", webHome + apiPageZebpay, true); // true for asynchronous
-            xmlHttp.send(null);
 
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN),
+                function(err, rows) {
 
-            Plotly.d3.csv(webHome + csvFilePathZebpay, function(err, rows) {
-
-                function unpack(rows, key) {
-                    return rows.map(function(row) { return row[key]; });
-                }
-
-                var selectorOptions = {
-                    buttons: [{
-                        step: 'month',
-                        stepmode: 'backward',
-                        count: 3,
-                        label: '3M'
-                    }, {
-                        step: 'month',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1M'
-                    }, {
-                        step: 'week',
-                        stepmode: 'backward',
-                        count: 2,
-                        label: '2w'
-                    }, {
-                        step: 'week',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1w'
-                    }, {
-                        step: 'day',
-                        stepmode: 'backward',
-                        count: 3,
-                        label: '3d'
-                    }, {
-                        step: 'day',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1d'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 12,
-                        label: '12h'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 6,
-                        label: '6h'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 2,
-                        label: '2h'
-                    }, {
-                        step: 'minute',
-                        stepmode: 'backward',
-                        count: 30,
-                        label: '30m'
-                    }, {
-                        step: 'all',
-                    }],
-                };
-
-
-                var trace1 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: buyPriceKey,
-                    x: unpack(rows, datePriceKey),
-                    y: unpack(rows, buyPriceKey),
-                    line: { color: '#17BECF' }
-                }
-
-                var trace2 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: sellPriceKey,
-                    x: unpack(rows, datePriceKey),
-                    y: unpack(rows, sellPriceKey),
-                    line: { color: '#7F7F7F' }
-                }
-
-                var data = [trace1, trace2];
-
-                var layout = {
-                    title: graphTitleZebpay,
-                    xaxis: {
-                        rangeselector: selectorOptions,
-                        rangeslider: {}
+                    function unpack(rows, key) {
+                        return rows.map(function(row) { return row[key]; });
                     }
-                };
 
-                Plotly.newPlot('zebpay-graph', data, layout);
-            })
-        </script>
-        <script>
-            var datePriceKey = 'Date';
-            var buyPriceKey = 'Buy';
-            var sellPriceKey = 'Sell';
-            var graphTitleCoinome = 'Coinome Bitcoin Price Graph';
-            var csvFileName = 'coinomePriceData.csv';
-            var webHome = 'http://zgraph.unaux.com';
-            var apiPageCoinome = '/api/index.php?exchange=coinome';
-            var datapath = '/api/data/';
-            var csvFilePathCoinome = datapath + csvFileName;
-
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function() {
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                    console.log("Price fetched");
-                }
-            }
-            xmlHttp.open("GET", webHome + apiPageCoinome, true); // true for asynchronous
-            xmlHttp.send(null);
-
-
-            Plotly.d3.csv(webHome + csvFilePathCoinome, function(err, rows) {
-
-                function unpack(rows, key) {
-                    return rows.map(function(row) { return row[key]; });
-                }
-
-                var selectorOptions = {
-                    buttons: [{
-                        step: 'month',
-                        stepmode: 'backward',
-                        count: 3,
-                        label: '3M'
-                    }, {
-                        step: 'month',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1M'
-                    }, {
-                        step: 'week',
-                        stepmode: 'backward',
-                        count: 2,
-                        label: '2w'
-                    }, {
-                        step: 'week',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1w'
-                    }, {
-                        step: 'day',
-                        stepmode: 'backward',
-                        count: 3,
-                        label: '3d'
-                    }, {
-                        step: 'day',
-                        stepmode: 'backward',
-                        count: 1,
-                        label: '1d'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 12,
-                        label: '12h'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 6,
-                        label: '6h'
-                    }, {
-                        step: 'hour',
-                        stepmode: 'backward',
-                        count: 2,
-                        label: '2h'
-                    }, {
-                        step: 'minute',
-                        stepmode: 'backward',
-                        count: 30,
-                        label: '30m'
-                    }, {
-                        step: 'all',
-                    }],
-                };
-
-
-                var trace1 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: buyPriceKey,
-                    x: unpack(rows, datePriceKey),
-                    y: unpack(rows, buyPriceKey),
-                    line: { color: '#17BECF' }
-                }
-
-                var trace2 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: sellPriceKey,
-                    x: unpack(rows, datePriceKey),
-                    y: unpack(rows, sellPriceKey),
-                    line: { color: '#7F7F7F' }
-                }
-
-                var data = [trace1, trace2];
-
-                var layout_coinome = {
-                    title: graphTitleCoinome,
-                    xaxis: {
-                        rangeselector: selectorOptions,
-                        rangeslider: {}
+                    var trace1 = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: BUY_PRICE_KEY,
+                        x: unpack(rows, DATE_PRICE_KEY),
+                        y: unpack(rows, BUY_PRICE_KEY),
+                        line: { color: '#17BECF' }
                     }
-                };
 
-                Plotly.newPlot('coinome-graph', data, layout_coinome);
-            })
+                    var trace2 = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: SELL_PRICE_KEY,
+                        x: unpack(rows, DATE_PRICE_KEY),
+                        y: unpack(rows, SELL_PRICE_KEY),
+                        line: { color: '#7F7F7F' }
+                    }
+
+                    var data = [trace1, trace2];
+
+                    var layout = {
+                        title: firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN),
+                        xaxis: {
+                            rangeselector: selectorOptions,
+                            rangeslider: {}
+                        }
+                    };
+
+                    Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
+                }
+            );
         </script>
     </body>
 
