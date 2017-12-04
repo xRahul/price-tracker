@@ -108,7 +108,7 @@
             }
 
             Plotly.d3.csv(
-                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN),
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
 
                     function unpack(rows, key) {
