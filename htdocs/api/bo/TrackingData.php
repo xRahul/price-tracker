@@ -17,6 +17,14 @@ class TrackingData {
         ];
     }
 
+    public function isEmpty()
+    {
+        if (empty($this->getDateTime()) || empty($this->getBuyPrice()) || empty($this->getSellPrice())) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @return mixed
      */

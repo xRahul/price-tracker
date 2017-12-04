@@ -22,11 +22,11 @@ class TimeTracker implements TimeTrackerInterface {
 
 	public function getTrackingData()
 	{
-		$this->checkTrackingData();
+		$this->validateTrackingData();
 		return intval(($this->endTimestamp - $this->beginTimestamp) * 1000);
 	}
 
-	private function checkTrackingData() {
+	private function validateTrackingData() {
 		if (empty($this->endTimestamp)) {
 			throw new Exception("You need to stop tracking first.");
 		}
