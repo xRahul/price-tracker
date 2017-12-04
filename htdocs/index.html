@@ -107,6 +107,32 @@
                 return str.charAt(0).toUpperCase() + str.slice(1)
             }
 
+            var getTrace = function(traceType, rows) {
+                if (traceType == BUY_PRICE_KEY) {
+                    var color = '#17BECF'
+                } else if (traceType == SELL_PRICE_KEY) {
+                    var color = '#7F7F7F'
+                }
+                return {
+                    type: "scatter",
+                    mode: "lines",
+                    name: traceType,
+                    x: unpack(rows, DATE_PRICE_KEY),
+                    y: unpack(rows, traceType),
+                    line: { color: color }
+                }
+            }
+
+            var getLayout = function(title) {
+                return {
+                    title: title,
+                    xaxis: {
+                        rangeselector: selectorOptions,
+                        rangeslider: {}
+                    }
+                }
+            }
+
             Plotly.d3.csv(
                 WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
@@ -115,35 +141,60 @@
                         return rows.map(function(row) { return row[key]; });
                     }
 
-                    var trace1 = {
-                        type: "scatter",
-                        mode: "lines",
-                        name: BUY_PRICE_KEY,
-                        x: unpack(rows, DATE_PRICE_KEY),
-                        y: unpack(rows, BUY_PRICE_KEY),
-                        line: { color: '#17BECF' }
-                    }
-
-                    var trace2 = {
-                        type: "scatter",
-                        mode: "lines",
-                        name: SELL_PRICE_KEY,
-                        x: unpack(rows, DATE_PRICE_KEY),
-                        y: unpack(rows, SELL_PRICE_KEY),
-                        line: { color: '#7F7F7F' }
-                    }
-
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
                     var data = [trace1, trace2];
-
-                    var layout = {
-                        title: firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN),
-                        xaxis: {
-                            rangeselector: selectorOptions,
-                            rangeslider: {}
-                        }
-                    };
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN))
 
                     Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
+
+                    function unpack(rows, key) {
+                        return rows.map(function(row) { return row[key]; });
+                    }
+
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(ZEBPAY) + " " + firstUpperCase(BITCOIN))
+
+                    Plotly.newPlot(ZEBPAY + '-' + BITCOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
+
+                    function unpack(rows, key) {
+                        return rows.map(function(row) { return row[key]; });
+                    }
+
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(LITECOIN))
+
+                    Plotly.newPlot(COINOME + '-' + LITECOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
+
+                    function unpack(rows, key) {
+                        return rows.map(function(row) { return row[key]; });
+                    }
+
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCASH))
+
+                    Plotly.newPlot(COINOME + '-' + BITCASH + '-graph', data, layout);
                 }
             );
         </script>
