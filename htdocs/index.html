@@ -107,6 +107,10 @@
                 return str.charAt(0).toUpperCase() + str.slice(1)
             }
 
+            var unpack = function (rows, key) {
+                return rows.map(function(row) { return row[key]; });
+            }
+
             var getTrace = function(traceType, rows) {
                 if (traceType == BUY_PRICE_KEY) {
                     var color = '#17BECF'
@@ -137,10 +141,6 @@
                 WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
 
-                    function unpack(rows, key) {
-                        return rows.map(function(row) { return row[key]; });
-                    }
-
                     var trace1 = getTrace(BUY_PRICE_KEY, rows)
                     var trace2 = getTrace(SELL_PRICE_KEY, rows)
                     var data = [trace1, trace2];
@@ -152,10 +152,6 @@
             Plotly.d3.csv(
                 WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
-
-                    function unpack(rows, key) {
-                        return rows.map(function(row) { return row[key]; });
-                    }
 
                     var trace1 = getTrace(BUY_PRICE_KEY, rows)
                     var trace2 = getTrace(SELL_PRICE_KEY, rows)
@@ -169,10 +165,6 @@
                 WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
 
-                    function unpack(rows, key) {
-                        return rows.map(function(row) { return row[key]; });
-                    }
-
                     var trace1 = getTrace(BUY_PRICE_KEY, rows)
                     var trace2 = getTrace(SELL_PRICE_KEY, rows)
                     var data = [trace1, trace2];
@@ -184,10 +176,6 @@
             Plotly.d3.csv(
                 WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
                 function(err, rows) {
-
-                    function unpack(rows, key) {
-                        return rows.map(function(row) { return row[key]; });
-                    }
 
                     var trace1 = getTrace(BUY_PRICE_KEY, rows)
                     var trace2 = getTrace(SELL_PRICE_KEY, rows)
