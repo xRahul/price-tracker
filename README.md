@@ -1,4 +1,4 @@
-# Bitcoin price-tracker
+# Cryptocurrency price-tracker
 Plot Bitcoin Price change and save price data locally (setup cron to periodically get data)
 
 This repository contains-
@@ -9,5 +9,5 @@ This repository contains-
 - folder structure setup for ftp to cpanel sites.
 
 exchanges supported-
-- Zebpay
-- Coinome
+- Zebpay: Bitcoin
+- Coinome: Bitcoin, Litecoin, Bitcoin Cash
