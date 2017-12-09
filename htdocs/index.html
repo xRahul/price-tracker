@@ -44,8 +44,12 @@
             var BUY_PRICE_KEY = 'Buy';
             var SELL_PRICE_KEY = 'Sell';
             var CSV_FILENAME_SUFFIX = 'PriceData.csv';
-            var WEB_HOME = 'http://zgraph.unaux.com';
             var API_DATA_PATH = '/api/data/';
+
+            var WEB_HOME = location.protocol.concat("//").concat(window.location.hostname);
+            if (window.location.port) {
+                WEB_HOME = WEB_HOME.concat(":").concat(window.location.port);
+            }
 
             var selectorOptions = {
                 buttons: [{
