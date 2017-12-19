@@ -1,207 +1,273 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Bitcoin Price Tracker (INR)</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/black/pace-theme-minimal.min.css" integrity="sha256-6JGNgkzJ/plvOfsg/ENvu2BYcOWSf6vxVc9nBrULVR4=" crossorigin="anonymous" />
+<html amp lang="en">
 
-        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111381621-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'UA-111381621-1');
-        </script>
+<head>
+    <title>Cryptocurrency Price Tracker | Coinome, Zebpay</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <meta name="description" content="This page plots the price of cryptocurrency from Coinome and Zebpay. It tracks bitcoin, litecoin and bitcoin cash price via their apis.">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/black/pace-theme-minimal.min.css" integrity="sha256-6JGNgkzJ/plvOfsg/ENvu2BYcOWSf6vxVc9nBrULVR4=" crossorigin="anonymous" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111381621-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.31.2/plotly-finance.min.js" integrity="sha256-GJ7kHfwri0fkziLGXEhxWwfvDWtqAIFznkpRiVijfpY=" crossorigin="anonymous"></script>
-        <style type="text/css">
-            #openLink {
-                position: fixed;
-                bottom: 0;
-                right: 10px;
-                text-decoration: none;
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-111381621-1');
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.31.2/plotly-finance.min.js" integrity="sha256-GJ7kHfwri0fkziLGXEhxWwfvDWtqAIFznkpRiVijfpY=" crossorigin="anonymous"></script>
+    <style type="text/css" amp-custom>
+        #openLink {
+            position: fixed;
+            bottom: 0;
+            right: 10px;
+            text-decoration: none;
+        }
+    </style>
+    <style amp-boilerplate>
+        body {
+            -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            animation: -amp-start 8s steps(1, end) 0s 1 normal both
+        }
+
+        @-webkit-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-moz-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-ms-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-o-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+    </style>
+    <noscript>
+        <style amp-boilerplate>
+            body {
+                -webkit-animation: none;
+                -moz-animation: none;
+                -ms-animation: none;
+                animation: none
             }
         </style>
-    </head>
+    </noscript>
+</head>
 
-    <body>
-        <!-- Plotly chart will be drawn inside this DIV -->
-        <div id="zebpay-bitcoin-graph"></div>
-        <br>
-        <br>
-        <div id="coinome-bitcoin-graph"></div>
-        <br>
-        <br>
-        <div id="coinome-litecoin-graph"></div>
-        <br>
-        <br>
-        <div id="coinome-bitcash-graph"></div>
-        <br>
-        <br>
-        <a id="openLink" href="https://github.com/xRahul/price-tracker" title="Price Tracker">
-            Open Source
-        </a>
+<body>
+    <!-- Plotly chart will be drawn inside this DIV -->
+    <div id="zebpay-bitcoin-graph"></div>
+    <br>
+    <br>
+    <div id="coinome-bitcoin-graph"></div>
+    <br>
+    <br>
+    <div id="coinome-litecoin-graph"></div>
+    <br>
+    <br>
+    <div id="coinome-bitcash-graph"></div>
+    <br>
+    <br>
+    <a id="openLink" href="https://github.com/xRahul/price-tracker" title="Price Tracker">
+        Open Source
+    </a>
+    <script>
+        var BITCOIN = 'bitcoin';
+        var BITCASH = 'bitcash';
+        var LITECOIN = 'litecoin';
+        var ZEBPAY = 'zebpay';
+        var COINOME = 'coinome';
+        var DATE_PRICE_KEY = 'Date';
+        var BUY_PRICE_KEY = 'Buy';
+        var SELL_PRICE_KEY = 'Sell';
+        var CSV_FILENAME_SUFFIX = 'PriceData.csv';
+        var API_DATA_PATH = '/api/data/';
 
-        <script>
+        var WEB_HOME = location.protocol.concat("//").concat(window.location.hostname);
+        if (window.location.port) {
+            WEB_HOME = WEB_HOME.concat(":").concat(window.location.port);
+        }
 
-            var BITCOIN = 'bitcoin';
-            var BITCASH = 'bitcash';
-            var LITECOIN = 'litecoin';
-            var ZEBPAY = 'zebpay';
-            var COINOME = 'coinome';
-            var DATE_PRICE_KEY = 'Date';
-            var BUY_PRICE_KEY = 'Buy';
-            var SELL_PRICE_KEY = 'Sell';
-            var CSV_FILENAME_SUFFIX = 'PriceData.csv';
-            var API_DATA_PATH = '/api/data/';
+        var selectorOptions = {
+            buttons: [{
+                step: 'month',
+                stepmode: 'backward',
+                count: 3,
+                label: '3M'
+            }, {
+                step: 'month',
+                stepmode: 'backward',
+                count: 1,
+                label: '1M'
+            }, {
+                step: 'week',
+                stepmode: 'backward',
+                count: 2,
+                label: '2w'
+            }, {
+                step: 'week',
+                stepmode: 'backward',
+                count: 1,
+                label: '1w'
+            }, {
+                step: 'day',
+                stepmode: 'backward',
+                count: 3,
+                label: '3d'
+            }, {
+                step: 'day',
+                stepmode: 'backward',
+                count: 1,
+                label: '1d'
+            }, {
+                step: 'hour',
+                stepmode: 'backward',
+                count: 12,
+                label: '12h'
+            }, {
+                step: 'hour',
+                stepmode: 'backward',
+                count: 6,
+                label: '6h'
+            }, {
+                step: 'hour',
+                stepmode: 'backward',
+                count: 2,
+                label: '2h'
+            }, {
+                step: 'minute',
+                stepmode: 'backward',
+                count: 30,
+                label: '30m'
+            }, {
+                step: 'all',
+            }],
+        };
 
-            var WEB_HOME = location.protocol.concat("//").concat(window.location.hostname);
-            if (window.location.port) {
-                WEB_HOME = WEB_HOME.concat(":").concat(window.location.port);
+        var firstUpperCase = function(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1)
+        }
+
+        var unpack = function(rows, key) {
+            return rows.map(function(row) { return row[key]; });
+        }
+
+        var getTrace = function(traceType, rows) {
+            if (traceType == BUY_PRICE_KEY) {
+                var color = '#17BECF'
+            } else if (traceType == SELL_PRICE_KEY) {
+                var color = '#7F7F7F'
             }
-
-            var selectorOptions = {
-                buttons: [{
-                    step: 'month',
-                    stepmode: 'backward',
-                    count: 3,
-                    label: '3M'
-                }, {
-                    step: 'month',
-                    stepmode: 'backward',
-                    count: 1,
-                    label: '1M'
-                }, {
-                    step: 'week',
-                    stepmode: 'backward',
-                    count: 2,
-                    label: '2w'
-                }, {
-                    step: 'week',
-                    stepmode: 'backward',
-                    count: 1,
-                    label: '1w'
-                }, {
-                    step: 'day',
-                    stepmode: 'backward',
-                    count: 3,
-                    label: '3d'
-                }, {
-                    step: 'day',
-                    stepmode: 'backward',
-                    count: 1,
-                    label: '1d'
-                }, {
-                    step: 'hour',
-                    stepmode: 'backward',
-                    count: 12,
-                    label: '12h'
-                }, {
-                    step: 'hour',
-                    stepmode: 'backward',
-                    count: 6,
-                    label: '6h'
-                }, {
-                    step: 'hour',
-                    stepmode: 'backward',
-                    count: 2,
-                    label: '2h'
-                }, {
-                    step: 'minute',
-                    stepmode: 'backward',
-                    count: 30,
-                    label: '30m'
-                }, {
-                    step: 'all',
-                }],
-            };
-
-            var firstUpperCase = function(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1)
+            return {
+                type: "scatter",
+                mode: "lines",
+                name: traceType,
+                x: unpack(rows, DATE_PRICE_KEY),
+                y: unpack(rows, traceType),
+                line: { color: color }
             }
+        }
 
-            var unpack = function (rows, key) {
-                return rows.map(function(row) { return row[key]; });
-            }
-
-            var getTrace = function(traceType, rows) {
-                if (traceType == BUY_PRICE_KEY) {
-                    var color = '#17BECF'
-                } else if (traceType == SELL_PRICE_KEY) {
-                    var color = '#7F7F7F'
-                }
-                return {
-                    type: "scatter",
-                    mode: "lines",
-                    name: traceType,
-                    x: unpack(rows, DATE_PRICE_KEY),
-                    y: unpack(rows, traceType),
-                    line: { color: color }
-                }
-            }
-
-            var getLayout = function(title) {
-                return {
-                    title: title,
-                    xaxis: {
-                        rangeselector: selectorOptions,
-                        rangeslider: {}
-                    }
+        var getLayout = function(title) {
+            return {
+                title: title,
+                xaxis: {
+                    rangeselector: selectorOptions,
+                    rangeslider: {}
                 }
             }
+        }
 
-            Plotly.d3.csv(
-                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
-                function(err, rows) {
+        Plotly.d3.csv(
+            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
+            function(err, rows) {
 
-                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                    var data = [trace1, trace2];
-                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN))
+                var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                var data = [trace1, trace2];
+                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN))
 
-                    Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
-                }
-            );
-            Plotly.d3.csv(
-                WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
-                function(err, rows) {
+                Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
+            }
+        );
+        Plotly.d3.csv(
+            WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
+            function(err, rows) {
 
-                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                    var data = [trace1, trace2];
-                    var layout = getLayout(firstUpperCase(ZEBPAY) + " " + firstUpperCase(BITCOIN))
+                var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                var data = [trace1, trace2];
+                var layout = getLayout(firstUpperCase(ZEBPAY) + " " + firstUpperCase(BITCOIN))
 
-                    Plotly.newPlot(ZEBPAY + '-' + BITCOIN + '-graph', data, layout);
-                }
-            );
-            Plotly.d3.csv(
-                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
-                function(err, rows) {
+                Plotly.newPlot(ZEBPAY + '-' + BITCOIN + '-graph', data, layout);
+            }
+        );
+        Plotly.d3.csv(
+            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
+            function(err, rows) {
 
-                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                    var data = [trace1, trace2];
-                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(LITECOIN))
+                var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                var data = [trace1, trace2];
+                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(LITECOIN))
 
-                    Plotly.newPlot(COINOME + '-' + LITECOIN + '-graph', data, layout);
-                }
-            );
-            Plotly.d3.csv(
-                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
-                function(err, rows) {
+                Plotly.newPlot(COINOME + '-' + LITECOIN + '-graph', data, layout);
+            }
+        );
+        Plotly.d3.csv(
+            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
+            function(err, rows) {
 
-                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                    var data = [trace1, trace2];
-                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCASH))
+                var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                var data = [trace1, trace2];
+                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCASH))
 
-                    Plotly.newPlot(COINOME + '-' + BITCASH + '-graph', data, layout);
-                }
-            );
-        </script>
-    </body>
+                Plotly.newPlot(COINOME + '-' + BITCASH + '-graph', data, layout);
+            }
+        );
+    </script>
+</body>
 
 </html>
