@@ -21,7 +21,6 @@
         gtag('js', new Date());
         gtag('config', 'UA-111381621-1');
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.31.2/plotly-finance.min.js" integrity="sha256-GJ7kHfwri0fkziLGXEhxWwfvDWtqAIFznkpRiVijfpY=" crossorigin="anonymous"></script>
     <style type="text/css" amp-custom>
         #openLink {
             position: fixed;
@@ -112,161 +111,164 @@
     <a id="openLink" href="https://github.com/xRahul/price-tracker" title="Price Tracker">
         Open Source
     </a>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.31.2/plotly-finance.min.js" integrity="sha256-GJ7kHfwri0fkziLGXEhxWwfvDWtqAIFznkpRiVijfpY=" crossorigin="anonymous"></script>
     <script>
-        var BITCOIN = 'bitcoin';
-        var BITCASH = 'bitcash';
-        var LITECOIN = 'litecoin';
-        var ZEBPAY = 'zebpay';
-        var COINOME = 'coinome';
-        var DATE_PRICE_KEY = 'Date';
-        var BUY_PRICE_KEY = 'Buy';
-        var SELL_PRICE_KEY = 'Sell';
-        var CSV_FILENAME_SUFFIX = 'PriceData.csv';
-        var API_DATA_PATH = '/api/data/';
+        window.addEventListener('load', function () {
+            var BITCOIN = 'bitcoin';
+            var BITCASH = 'bitcash';
+            var LITECOIN = 'litecoin';
+            var ZEBPAY = 'zebpay';
+            var COINOME = 'coinome';
+            var DATE_PRICE_KEY = 'Date';
+            var BUY_PRICE_KEY = 'Buy';
+            var SELL_PRICE_KEY = 'Sell';
+            var CSV_FILENAME_SUFFIX = 'PriceData.csv';
+            var API_DATA_PATH = '/api/data/';
 
-        var WEB_HOME = location.protocol.concat("//").concat(window.location.hostname);
-        if (window.location.port) {
-            WEB_HOME = WEB_HOME.concat(":").concat(window.location.port);
-        }
-
-        var selectorOptions = {
-            buttons: [{
-                step: 'month',
-                stepmode: 'backward',
-                count: 3,
-                label: '3M'
-            }, {
-                step: 'month',
-                stepmode: 'backward',
-                count: 1,
-                label: '1M'
-            }, {
-                step: 'week',
-                stepmode: 'backward',
-                count: 2,
-                label: '2w'
-            }, {
-                step: 'week',
-                stepmode: 'backward',
-                count: 1,
-                label: '1w'
-            }, {
-                step: 'day',
-                stepmode: 'backward',
-                count: 3,
-                label: '3d'
-            }, {
-                step: 'day',
-                stepmode: 'backward',
-                count: 1,
-                label: '1d'
-            }, {
-                step: 'hour',
-                stepmode: 'backward',
-                count: 12,
-                label: '12h'
-            }, {
-                step: 'hour',
-                stepmode: 'backward',
-                count: 6,
-                label: '6h'
-            }, {
-                step: 'hour',
-                stepmode: 'backward',
-                count: 2,
-                label: '2h'
-            }, {
-                step: 'minute',
-                stepmode: 'backward',
-                count: 30,
-                label: '30m'
-            }, {
-                step: 'all',
-            }],
-        };
-
-        var firstUpperCase = function(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1)
-        }
-
-        var unpack = function(rows, key) {
-            return rows.map(function(row) { return row[key]; });
-        }
-
-        var getTrace = function(traceType, rows) {
-            if (traceType == BUY_PRICE_KEY) {
-                var color = '#17BECF'
-            } else if (traceType == SELL_PRICE_KEY) {
-                var color = '#7F7F7F'
+            var WEB_HOME = location.protocol.concat("//").concat(window.location.hostname);
+            if (window.location.port) {
+                WEB_HOME = WEB_HOME.concat(":").concat(window.location.port);
             }
-            return {
-                type: "scatter",
-                mode: "lines",
-                name: traceType,
-                x: unpack(rows, DATE_PRICE_KEY),
-                y: unpack(rows, traceType),
-                line: { color: color }
-            }
-        }
 
-        var getLayout = function(title) {
-            return {
-                title: title,
-                xaxis: {
-                    rangeselector: selectorOptions,
-                    rangeslider: {}
+            var selectorOptions = {
+                buttons: [{
+                    step: 'month',
+                    stepmode: 'backward',
+                    count: 3,
+                    label: '3M'
+                }, {
+                    step: 'month',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1M'
+                }, {
+                    step: 'week',
+                    stepmode: 'backward',
+                    count: 2,
+                    label: '2w'
+                }, {
+                    step: 'week',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1w'
+                }, {
+                    step: 'day',
+                    stepmode: 'backward',
+                    count: 3,
+                    label: '3d'
+                }, {
+                    step: 'day',
+                    stepmode: 'backward',
+                    count: 1,
+                    label: '1d'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 12,
+                    label: '12h'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 6,
+                    label: '6h'
+                }, {
+                    step: 'hour',
+                    stepmode: 'backward',
+                    count: 2,
+                    label: '2h'
+                }, {
+                    step: 'minute',
+                    stepmode: 'backward',
+                    count: 30,
+                    label: '30m'
+                }, {
+                    step: 'all',
+                }],
+            };
+
+            var firstUpperCase = function(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1)
+            }
+
+            var unpack = function(rows, key) {
+                return rows.map(function(row) { return row[key]; });
+            }
+
+            var getTrace = function(traceType, rows) {
+                if (traceType == BUY_PRICE_KEY) {
+                    var color = '#17BECF'
+                } else if (traceType == SELL_PRICE_KEY) {
+                    var color = '#7F7F7F'
+                }
+                return {
+                    type: "scatter",
+                    mode: "lines",
+                    name: traceType,
+                    x: unpack(rows, DATE_PRICE_KEY),
+                    y: unpack(rows, traceType),
+                    line: { color: color }
                 }
             }
-        }
 
-        Plotly.d3.csv(
-            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
-            function(err, rows) {
-
-                var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                var data = [trace1, trace2];
-                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN))
-
-                Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
+            var getLayout = function(title) {
+                return {
+                    title: title,
+                    xaxis: {
+                        rangeselector: selectorOptions,
+                        rangeslider: {}
+                    }
+                }
             }
-        );
-        Plotly.d3.csv(
-            WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
-            function(err, rows) {
 
-                var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                var data = [trace1, trace2];
-                var layout = getLayout(firstUpperCase(ZEBPAY) + " " + firstUpperCase(BITCOIN))
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
 
-                Plotly.newPlot(ZEBPAY + '-' + BITCOIN + '-graph', data, layout);
-            }
-        );
-        Plotly.d3.csv(
-            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
-            function(err, rows) {
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCOIN))
 
-                var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                var data = [trace1, trace2];
-                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(LITECOIN))
+                    Plotly.newPlot(COINOME + '-' + BITCOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + ZEBPAY + firstUpperCase(BITCOIN) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
 
-                Plotly.newPlot(COINOME + '-' + LITECOIN + '-graph', data, layout);
-            }
-        );
-        Plotly.d3.csv(
-            WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
-            function(err, rows) {
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(ZEBPAY) + " " + firstUpperCase(BITCOIN))
 
-                var trace1 = getTrace(BUY_PRICE_KEY, rows)
-                var trace2 = getTrace(SELL_PRICE_KEY, rows)
-                var data = [trace1, trace2];
-                var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCASH))
+                    Plotly.newPlot(ZEBPAY + '-' + BITCOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(LITECOIN) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
 
-                Plotly.newPlot(COINOME + '-' + BITCASH + '-graph', data, layout);
-            }
-        );
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(LITECOIN))
+
+                    Plotly.newPlot(COINOME + '-' + LITECOIN + '-graph', data, layout);
+                }
+            );
+            Plotly.d3.csv(
+                WEB_HOME + API_DATA_PATH + COINOME + firstUpperCase(BITCASH) + CSV_FILENAME_SUFFIX,
+                function(err, rows) {
+
+                    var trace1 = getTrace(BUY_PRICE_KEY, rows)
+                    var trace2 = getTrace(SELL_PRICE_KEY, rows)
+                    var data = [trace1, trace2];
+                    var layout = getLayout(firstUpperCase(COINOME) + " " + firstUpperCase(BITCASH))
+
+                    Plotly.newPlot(COINOME + '-' + BITCASH + '-graph', data, layout);
+                }
+            );
+        });
     </script>
 </body>
 
