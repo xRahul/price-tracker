@@ -11,4 +11,4 @@ This contains-
 
 exchanges supported-
 - Zebpay: Bitcoin
-- Coinome: Bitcoin, Litecoin, Bitcoin Cash
+- Coinome(API Down): Bitcoin, Litecoin, Bitcoin Cash
