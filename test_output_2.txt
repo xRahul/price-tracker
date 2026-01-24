@@ -1,0 +1,10 @@
+PHPUnit 9.6.32 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.6
+Configuration: /app/phpunit.xml
+
+..                                                                  2 / 2 (100%)
+
+Time: 00:00.018, Memory: 6.00 MB
+
+OK (2 tests, 4 assertions)
